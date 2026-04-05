@@ -85,28 +85,27 @@
             </div>
         </section>
 
-        <section id="tab-store" class="tab-content">
-            <p class="text-blue">Expand your automation arsenal.</p>
-            <div class="plugin-grid">
-                <div class="plugin-card store">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
-                        <h3 class="text-orange">The Master Combo</h3>
-                        <span class="mono-small text-orange">$129</span>
-                    </div>
-                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1;">Unlock every single plugin in the Dapper suite.</p>
-                    <button class="btn btn-primary" style="padding: 0.5rem; font-size: 0.8rem;">PURCHASE NOW</button>
-                </div>
-                
-                <div class="plugin-card store">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
-                        <h3 class="text-main">Auto-Dimension Pro</h3>
-                        <span class="mono-small text-muted">$49</span>
-                    </div>
-                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1;">Intelligently dimensions entire floor plans automatically.</p>
-                    <button class="btn btn-outline" style="padding: 0.5rem; font-size: 0.8rem;">PURCHASE NOW</button>
-                </div>
+        <section id="tab-store" class="tab-content" style="height: 80vh;">
+        <p class="text-blue">Expand your automation arsenal.</p>
+            <iframe src="../Portal/store.html" style="width: 100%; height: 100%; border: none; margin-top: 20px;"></iframe>
+            </section>
+
+            <div id="payment-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; display:flex; align-items:center; justify-content:center;">
+            <div class="portal-card" style="max-width:500px; text-align:center;">
+            <h3 id="pay-title" class="text-orange">Complete Purchase</h3>
+            <p id="pay-desc" style="margin: 1rem 0;"></p>
+        
+            <div style="background:var(--bg-dark); padding:1.5rem; border:1px solid var(--border-color); text-align:left;">
+            <p class="mono-small text-purple">SADAPAY TRANSFER INSTRUCTIONS</p>
+            <p style="margin-top:10px; font-size:0.9rem;">1. Open your SadaPay / Bank App.</p>
+            <p style="font-size:0.9rem;">2. Transfer amount to: <strong>03XX-XXXXXXX</strong></p>
+            <p style="font-size:0.9rem;">3. Receiver Name: <strong>FAIZAN MANSHAD</strong></p>
+            <p style="font-size:0.9rem;">4. WhatsApp screenshot to: <strong>+92 XXX XXXXXXX</strong></p>
             </div>
-        </section>
+        
+        <button id="close-pay" class="btn btn-outline btn-full" style="margin-top:1.5rem;">I HAVE SENT THE PAYMENT</button>
+    </div>
+</div>
 
         <section id="tab-profile" class="tab-content">
         <div style="background: var(--card-bg); padding: 2.5rem; border: 1px solid var(--border-color); max-width: 600px;">

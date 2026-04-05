@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Store | Dapper.BIM</title>
+    
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        /* Interactive Background Logic */
+        #interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .store-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 2rem; 
+            margin-top: 3rem;
+        }
+
+        .store-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            padding: 2.5rem; 
+            display: flex; 
+            flex-direction: column; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .store-card:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(157, 78, 221, 0.1);
+        }
+
+        .price-tag { font-size: 2.5rem; font-weight: 800; color: var(--neon-orange); margin: 1rem 0; font-family: 'Inter', sans-serif;}
+        .badge { font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 4px 12px; border-radius: 4px; background: rgba(157, 78, 221, 0.1); color: var(--neon-purple); width: fit-content; letter-spacing: 1px;}
+        
+        .store-container { padding: 6rem 0; }
+
+        /* ================= SMART IFRAME OVERRIDES ================= */
+        /* If this page is inside the Dashboard, we hide the "fluff" */
+        body.is-embedded #interactive-bg,
+        body.is-embedded #store-header,
+        body.is-embedded .store-title-area {
+            display: none !important;
+        }
+
+        body.is-embedded .store-container {
+            padding: 0 !important; /* Remove large padding so it fits the dashboard tab */
+        }
+
+        body.is-embedded .store-grid {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="interactive-bg"></canvas>
+
+    <div class="content-wrapper">
+        <header id="store-header" style="padding: 2rem 0;">
+            <a href="../index.html" style="color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 1px;">
+                <i class="ph ph-arrow-left"></i> BACK TO HOME
+            </a>
+        </header>
+
+        <main class="store-container">
+            <div class="store-title-area" style="margin-bottom: 4rem;">
+                <p class="mono-subtitle text-purple">MARKETPLACE</p>
+                <h2 class="section-title">Plugin Store</h2>
+                <p class="text-blue">Select your tools and expand your BIM capabilities.</p>
+            </div>
+
+            <div class="store-grid">
+                <div class="store-card">
+                    <span class="badge">STRUCTURAL</span>
+                    <h3 class="card-title" style="font-size: 1.8rem; margin: 1rem 0 0.5rem 0;">Family Forge</h3>
+                    <p class="price-tag">$49.00<span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/mo</span></p>
+                    <p class="card-text-small" style="margin-bottom: 2rem; flex-grow: 1;">Automate your Revit family generation from Excel data instantly. Perfect for BIM Managers.</p>
+                    <button class="btn btn-primary buy-btn" data-plugin="Family Forge" data-price="49">BUY NOW</button>
+                </div>
+
+                <div class="store-card" style="border-top: 3px solid var(--neon-purple);">
+                    <div style="position: absolute; top: 1rem; right: 1rem; background: var(--neon-purple); color: white; padding: 2px 10px; font-size: 0.6rem; font-weight: bold; border-radius: 20px;">POPULAR</div>
+                    <span class="badge">THE FULL ARSENAL</span>
+                    <h3 class="card-title" style="font-size: 1.8rem; margin: 1rem 0 0.5rem 0;">Master Combo</h3>
+                    <p class="price-tag">$129.00<span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/mo</span></p>
+                    <p class="card-text-small" style="margin-bottom: 2rem; flex-grow: 1;">Unlock Family Forge + all current and future 2026 releases. Best value for firms.</p>
+                    <button class="btn btn-primary buy-btn" data-plugin="Master Combo" data-price="129">GET BUNDLE</button>
+                </div>
+
+                <div class="store-card" style="opacity: 0.6;">
+                    <span class="badge">ARCHITECTURAL</span>
+                    <h3 class="card-title" style="font-size: 1.8rem; margin: 1rem 0 0.5rem 0;">Auto-Dimension</h3>
+                    <p class="price-tag">--</p>
+                    <p class="card-text-small" style="margin-bottom: 2rem;">Intelligent floor plan dimensioning engine. Coming late 2026.</p>
+                    <button class="btn btn-outline" disabled>COMING SOON</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check if inside an iframe
+        if (window.self !== window.top) {
+            document.body.classList.add('is-embedded');
+        }
+
+        // --- BACKGROUND DOTS SCRIPT ---
+        const canvas = document.getElementById('interactive-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+        let mouse = { x: null, y: null, radius: 120 };
+
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x; this.y = y; this.baseX = x; this.baseY = y;
+                this.size = 1.5; this.density = (Math.random() * 30) + 1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(100, 150, 255, 0.3)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath(); ctx.fill();
+            }
+            update() {
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouse.radius) {
+                    let force = (mouse.radius - distance) / mouse.radius;
+                    this.x -= (dx / distance) * force * this.density;
+                    this.y -= (dy / distance) * force * this.density;
+                } else {
+                    if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 10;
+                    if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 10;
+                }
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            for (let y = 0; y < canvas.height; y += 18) {
+                for (let x = 0; x < canvas.width; x += 18) {
+                    particlesArray.push(new Particle(x, y));
+                }
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(p => { p.draw(); p.update(); });
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+
+        // --- PURCHASE LOGIC ---
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const plugin = btn.getAttribute('data-plugin');
+                const price = btn.getAttribute('data-price');
+
+                // If inside dashboard, send message to parent to show SadaPay Modal
+                if (window.self !== window.top) {
+                    window.parent.postMessage({ type: 'BUY_REQUEST', plugin, price }, '*');
+                } else {
+                    // If standalone, redirect to the portal login so they can buy properly
+                    window.location.href = 'portal.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
