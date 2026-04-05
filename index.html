@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dapper.BIM | Next-Gen Revit Automation</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+</head>
+<body>
+    <canvas id="interactive-bg"></canvas>
+
+    <div class="content-wrapper">
+        
+        <header class="navbar">
+            <div class="logo">
+                <span class="logo-dot"></span>
+                <h1>Dapper.BIM</h1>
+            </div>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="ph ph-list"></i>
+            </button>
+
+            <nav class="nav-links">
+            <a href="#suite">TOOLS</a>
+            <a href="#developer">DEVELOPER</a>
+            <a href="#pricing">PRICING</a>
+            <a href="#contact">CONTACT</a>
+            <a href="Portal/portal.html" class="btn btn-outline" style="margin-left: 2rem; padding: 0.5rem 1.5rem;">PORTAL</a>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero" class="section-container">
+                <div class="hero-content scroll-reveal">
+                    <p class="mono-subtitle text-purple">NEXT-GEN REVIT AUTOMATION</p>
+                    <h2 class="hero-title">Still,<br>clicking<br>manually?</h2>
+                    <p class="hero-description">Stop wrestling with data entry. Dapper.BIM is a suite of revolutionary plugins designed to automate the impossible, saving BIM managers thousands of hours.</p>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary">EXPLORE VOICE MODELING</button>
+                        <button class="btn btn-outline">VIEW BUNDLES</button>
+                    </div>
+
+                    <div class="voice-indicator">
+                        <p class="mono-small">LISTENING FOR COMMANDS...</p>
+                        <div class="soundwave">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-graphic scroll-reveal">
+                    <div id="hero-3d-canvas" class="abstract-graphic"></div>
+                </div>
+            </section>
+
+            <section id="demo" class="section-container">
+                <div class="pricing-header scroll-reveal">
+                    <p class="mono-subtitle text-orange">LIVE ENGINE DEMO</p>
+                    <h2 class="section-title text-center">Watch the NLP engine at work.</h2>
+                    <p class="text-blue text-center">Click the microphone to dictate commands. Watch natural language translate into geometry.</p>
+                    
+                    <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+                        <div style="padding: 1rem 2rem; border: 1px dashed var(--neon-purple); border-radius: 8px; background-color: rgba(157, 78, 221, 0.05);">
+                            <p class="mono-small text-main" style="margin: 0;">
+                                🎤 <strong>PRO TIP:</strong> Record your voice to create any structural, architectural, or MEP component.<br>
+                                <span class="text-muted" style="text-transform: none; font-family: 'Inter', sans-serif;">(Try saying: "Create a wall", "Place a steel pipe", "Generate a floor slab", or test it with an unknown object!)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-container scroll-reveal">
+                    <div class="demo-controls-wrapper" style="display: flex; flex-direction: column; gap: 1rem; align-items: center; width: 100%; max-width: 600px; margin: 0 auto;">
+                        
+                        <div class="demo-controls" style="display: flex; gap: 1rem; align-items: center; justify-content: center; width: 100%;">
+                            <button id="mic-btn" class="btn btn-primary mic-button">
+                                <i class="ph ph-microphone"></i> <span id="mic-text">START DICTATION</span>
+                            </button>
+                            <button class="btn btn-outline" onclick="simulateNLP('clear')" style="height: fit-content; padding: 1rem 1.5rem;">
+                                <i class="ph ph-trash"></i> CLEAR ALL
+                            </button>
+                        </div>
+                        
+                        <p id="speech-status" class="mono-small text-muted text-center" style="margin: 0;">Awaiting input...</p>
+
+                        <div class="manual-input-group" style="display: flex; gap: 0.5rem; width: 100%;">
+                            <input type="text" id="manual-command" placeholder="Or type command (e.g., 'Create a steel wall')..." class="command-input">
+                            <button class="btn btn-outline" id="send-command-btn" style="padding: 0.8rem 1.5rem;">EXECUTE</button>
+                        </div>
+                    </div>
+                    
+                    <p id="speech-status" class="mono-small text-muted text-center" style="margin-top: -1rem; margin-bottom: 1rem;">Awaiting voice input...</p>
+
+                    <div class="demo-split">
+                        <div class="demo-terminal">
+                            <div class="terminal-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                <span class="terminal-title">Revit_API_Console.cs</span>
+                            </div>
+                            <div class="terminal-body" id="terminal-output">
+                                <p class="text-muted">// Ready. Click 'Start Dictation' and speak...</p>
+                            </div>
+                        </div>
+
+                        <div class="demo-3d" id="demo-3d-canvas">
+                            </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="suite" class="section-container">
+                <p class="mono-subtitle text-blue scroll-reveal">MODULAR ARCHITECTURE</p>
+                <div class="section-header-split scroll-reveal">
+                    <h2 class="section-title">The Automation Suite</h2>
+                    <p class="section-caption text-blue">Precision-engineered tools<br>for complex Revit workflows.</p>
+                </div>
+
+                <div class="bento-grid">
+                    <div class="bento-card feature-large scroll-reveal">
+                        <p class="mono-small text-purple">FLAGSHIP MODULE</p>
+                        <h3 class="card-title text-purple">Voice-Activated Modeling</h3>
+                        <p class="card-text">Speak your design intent. Our proprietary NLP engine translates natural language into direct Revit API calls. Place families, set parameters, and generate views without touching the mouse.</p>
+                        <div class="card-footer">
+                            <span class="mono-small text-blue">EST. TIME SAVED / PROJECT</span>
+                            <span class="stat-large text-orange">40 HRS</span>
+                        </div>
+                    </div>
+
+                    <div class="bento-card feature-side scroll-reveal">
+                        <i class="ph ph-command icon-orange"></i>
+                        <h4>Auto-Dimension Pro</h4>
+                        <p class="card-text-small">Intelligently dimensions entire floor plans based on customizable rule sets. Recognizes walls, grids, and openings instantly.</p>
+                        <div class="card-footer-small">
+                            <span class="mono-small text-blue">MANUAL CLICKS AVOIDED</span>
+                            <span class="stat-small text-orange">12,500+</span>
+                        </div>
+                    </div>
+
+                    <div class="bento-card feature-side scroll-reveal">
+                        <i class="ph ph-arrows-clockwise icon-white"></i>
+                        <h4>Data Sync Core</h4>
+                        <p class="card-text-small">Bi-directional sync between Revit parameters and external Excel/SQL databases in real-time. No more export/import dances.</p>
+                        <div class="card-footer-small">
+                            <span class="mono-small text-blue">DATA ACCURACY</span>
+                            <span class="stat-small text-orange">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="bento-card feature-bottom scroll-reveal">
+                        <i class="ph ph-files icon-white"></i>
+                        <h4>Sheet Generator</h4>
+                        <p class="card-text-small">Creates hundreds of sheets and places views based on a simple matrix. Perfect for large-scale documentation phases.</p>
+                    </div>
+
+                    <div class="bento-card feature-bottom scroll-reveal">
+                        <i class="ph ph-warning icon-white"></i>
+                        <h4>Clash Resolver AI</h4>
+                        <p class="card-text-small">Doesn't just find clashes—suggests optimal routing solutions based on historical coordination data.</p>
+                    </div>
+
+                    <div class="bento-card feature-bottom scroll-reveal">
+                        <i class="ph ph-trash icon-white"></i>
+                        <h4>Family Purge Deep</h4>
+                        <p class="card-text-small">Goes beyond native purge. Identifies and removes hidden, nested, and corrupted families bloat.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="developer" class="section-container">
+                <div class="dev-content scroll-reveal">
+                    <p class="mono-subtitle text-blue">MEET THE ARCHITECT</p>
+                    <h2 class="section-title">Built by a BIM Manager who got tired of clicking.</h2>
+                    <p class="dev-description text-blue">After a decade managing models for mega-projects, the inefficiency of manual drafting became unbearable. Dapper.BIM was born out of necessity—scripts written in the trenches, now polished into enterprise-grade tools.</p>
+                    
+                    <div class="dev-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">10+</span>
+                            <span class="mono-small text-blue">YEARS IN BIM</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">50k</span>
+                            <span class="mono-small text-blue">LINES OF C#</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0</span>
+                            <span class="mono-small text-blue">PATIENCE FOR BUSYWORK</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dev-portrait scroll-reveal">
+                    <img src="my-photo-masked.png" alt="Developer Portrait" class="portrait-image">
+                </div>
+            </section>
+
+            <section id="pricing" class="section-container">
+                <div class="pricing-header scroll-reveal">
+                    <p class="mono-subtitle text-blue">ACCESS GRANTED</p>
+                    <h2 class="section-title text-center">Reclaim your time.</h2>
+                    <p class="text-blue text-center">Choose a specific tool or unlock the entire automation suite.</p>
+                </div>
+
+                <div class="pricing-grid">
+                    <div class="pricing-card scroll-reveal">
+                        <p class="mono-small text-blue">A LA CARTE</p>
+                        <h3>Single Plugin</h3>
+                        <div class="price"><span class="price-big">$49</span><span class="price-small">/mo</span></div>
+                        <p class="pricing-desc text-blue">Perfect for solving one specific bottleneck.</p>
+                        <ul class="pricing-features text-blue">
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Choice of 1 Core Plugin</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Standard Support</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Monthly Updates</li>
+                        </ul>
+                        <button class="btn btn-outline btn-full">SELECT TOOL</button>
+                    </div>
+
+                    <div class="pricing-card featured-tier scroll-reveal">
+                        <div class="popular-tag">MOST POPULAR</div>
+                        <p class="mono-small text-purple">THE FULL ARSENAL</p>
+                        <h3>Dapper Suite</h3>
+                        <div class="price"><span class="price-big">$129</span><span class="price-small">/mo</span></div>
+                        <p class="pricing-desc text-blue">Complete access to all current and future plugins.</p>
+                        <ul class="pricing-features text-blue">
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Voice-Activated Modeling</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> All 5+ Core Plugins</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Priority API Access</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Custom Rule Scripts</li>
+                        </ul>
+                        <button class="btn btn-primary btn-full">GET FULL ACCESS</button>
+                    </div>
+
+                    <div class="pricing-card scroll-reveal">
+                        <p class="mono-small text-blue">ENTERPRISE</p>
+                        <h3>Firm Wide</h3>
+                        <div class="price"><span class="price-big">Custom</span></div>
+                        <p class="pricing-desc text-blue">Deploy across your entire organization.</p>
+                        <ul class="pricing-features text-blue">
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Unlimited Network Licenses</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Dedicated Server Deployment</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> Custom Plugin Development</li>
+                            <li><i class="ph ph-arrow-right icon-orange"></i> 1-on-1 Training</li>
+                        </ul>
+                        <button class="btn btn-outline btn-full">CONTACT SALES</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="section-container">
+                <div class="pricing-header scroll-reveal">
+                    <p class="mono-subtitle text-orange">GET IN TOUCH</p>
+                    <h2 class="section-title text-center">Have a custom request?</h2>
+                    <p class="text-blue text-center">Let's build the exact automation tool your firm needs.</p>
+                </div>
+                <div class="contact-form-container scroll-reveal">
+                    <form class="contact-form" id="custom-contact-form">
+                        
+                        <input type="hidden" name="access_key" value="24c457c3-e651-4c12-8953-987a02e9b1a3">
+                        
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" placeholder="Tell us about your workflow bottlenecks..." rows="5" required></textarea>
+                        
+                        <button type="submit" class="btn btn-primary" id="form-submit-btn">SEND MESSAGE</button>
+                        
+                        <p id="form-status-message" class="mono-small text-center" style="display: none; margin-top: 1rem;"></p>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer scroll-reveal">
+            <p class="mono-small">&copy; 2025-2026 Dapper.BIM | All Rights Reserved.</p>
+        </footer>
+    </div>
+
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <div class="modal-header">
+                <h3 id="modal-title" class="text-orange">Access Portal</h3>
+                <p id="modal-subtitle" class="mono-small text-muted">Sign in to download tools</p>
+            </div>
+            
+            <form id="auth-form" class="contact-form">
+                <input type="email" id="auth-email" placeholder="Email Address" required>
+                <input type="password" id="auth-password" placeholder="Password" required>
+                <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-full">LOG IN</button>
+                <p id="auth-status" class="mono-small text-center" style="margin-top: 1rem;"></p>
+            </form>
+
+            <p class="mono-small text-center" style="margin-top: 1.5rem;">
+                <span id="auth-toggle-text">Don't have an account?</span> 
+                <a href="#" id="auth-toggle-link" class="text-blue" style="text-decoration: none;">Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="dashboard-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <div class="modal-header">
+                <h3 class="text-purple">User Portal</h3>
+                <p class="mono-small text-muted" id="user-email-display">Logged in as: ...</p>
+            </div>
+            
+            <div style="background: var(--bg-dark); padding: 2rem; border: 1px solid var(--border-color); margin-top: 1.5rem;">
+                <h4 style="margin-bottom: 1rem;">Available Downloads</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                        <p><strong>Dapper.BIM - Family Forge</strong></p>
+                        <p class="mono-small text-muted">Version 1.0 (Revit 2024)</p>
+                    </div>
+                    <a href="FamilyForge_Setup_2024.exe" class="btn btn-primary" download>DOWNLOAD .EXE</a>
+                </div>
+            </div>
+
+            <button id="logout-btn" class="btn btn-outline btn-full" style="margin-top: 2rem; border-color: #ff5f56; color: #ff5f56;">SIGN OUT</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

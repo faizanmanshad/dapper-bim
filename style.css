@@ -1,0 +1,813 @@
+/* ================= VARIABLES & RESET ================= */
+:root {
+    --bg-dark: #000000;
+    --card-bg: #0a0a0a;
+    --border-color: #222222;
+    --text-main: #ffffff;
+    --text-muted: #888888;
+    
+    /* Neon Accents */
+    --neon-purple: #9d4edd;
+    --neon-orange: #fb8500;
+    --neon-blue: #4ea8de;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ================= CANVAS BACKGROUND ================= */
+#interactive-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Keeps the interactive grid behind the text */
+}
+
+/* ================= TYPOGRAPHY & UTILITIES ================= */
+.mono-small {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.mono-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.text-purple { color: var(--neon-purple); }
+.text-orange { color: var(--neon-orange); }
+.text-blue { color: var(--neon-blue); }
+.text-center { text-align: center; }
+
+h1, h2, h3, h4 {
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section-container {
+    padding: 6rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-container:last-child {
+    border-bottom: none;
+}
+
+/* ================= BUTTONS ================= */
+.btn {
+    padding: 1rem 2rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.btn-primary {
+    background-color: var(--neon-orange);
+    color: var(--bg-dark);
+}
+
+.btn-primary:hover {
+    background-color: #ff9e22;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    border-color: var(--text-main);
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+/* ================= NAVIGATION ================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    /* The Magic Sticky Code */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Keeps it above all 3D and floating elements */
+    
+    /* Glassmorphism Effect */
+    background-color: rgba(0, 0, 0, 0.65); /* Semi-transparent black */
+    backdrop-filter: blur(5px); /* Blurs the content scrolling behind it */
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    
+    /* Spacing adjustments for a sleek floating look */
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle bottom border */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-dot {
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, var(--neon-orange) 0%, var(--neon-purple) 100%);
+    border-radius: 50%;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    letter-spacing: -0.05em;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+/* ================= HERO SECTION ================= */
+#hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 70vh;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.hero-title {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    color: var(--text-blue);
+    margin-bottom: 3rem;
+    max-width: 90%;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.voice-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.soundwave {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.soundwave span {
+    display: block;
+    width: 4px;
+    height: 12px;
+    background-color: var(--neon-purple);
+    border-radius: 2px;
+}
+
+/* Simple CSS animation for the soundwave */
+.soundwave span:nth-child(even) { height: 6px; }
+.soundwave span:nth-child(3) { height: 16px; }
+
+/* ================= BENTO GRID (AUTOMATION SUITE) ================= */
+.section-header-split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.bento-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-large {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 3rem;
+}
+
+.card-title {
+    font-size: 2.5rem;
+    margin: 0.5rem 0 1.5rem 0;
+}
+
+.card-text {
+    font-size: 1.1rem;
+    color: var(--text-blue);
+    max-width: 80%;
+    flex-grow: 1;
+}
+
+.card-text-small {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    flex-grow: 1;
+}
+
+.card-footer, .card-footer-small {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.stat-large {
+    font-size: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+}
+
+.stat-small {
+    font-size: 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+}
+
+.bento-card i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.icon-orange { color: var(--neon-orange); }
+.icon-white { color: var(--text-main); }
+
+
+/* ================= LIVE API SIMULATOR ================= */
+.demo-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.demo-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.demo-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+
+.demo-split {
+    display: flex;
+    height: 400px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transform-style: preserve-3d;
+}
+
+.demo-terminal {
+    flex: 1;
+    background-color: #050505;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-header {
+    background-color: #111;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background-color: #ff5f56; }
+.dot.yellow { background-color: #ffbd2e; }
+.dot.green { background-color: #27c93f; }
+.terminal-title { margin-left: auto; margin-right: auto; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+
+.terminal-body {
+    padding: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.terminal-body p { margin-bottom: 0.5rem; }
+.code-keyword { color: var(--neon-purple); }
+.code-string { color: var(--neon-orange); }
+.code-method { color: var(--neon-blue); }
+
+.demo-3d {
+    flex: 1;
+    background-color: var(--card-bg);
+    position: relative;
+    cursor: grab;
+}
+.demo-3d:active { cursor: grabbing; }
+
+@media (max-width: 900px) {
+    .demo-split { flex-direction: column; height: 600px; }
+    .demo-terminal { border-right: none; border-bottom: 1px solid var(--border-color); }
+    .demo-controls { flex-wrap: wrap; }
+}
+
+
+
+/* ================= DEVELOPER PORTFOLIO ================= */
+#developer {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.dev-content {
+    flex: 1;
+}
+
+.dev-description {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.dev-stats {
+    display: flex;
+    gap: 3rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.dev-portrait {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.portrait-shape {
+    width: 300px;
+    height: 400px;
+    border: 1px solid var(--text-blue);
+    border-top-left-radius: 150px;
+    border-top-right-radius: 150px;
+    position: relative;
+}
+
+.portrait-shape::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    height: 250px;
+    background-color: var(--neon-blue);
+    border-top-left-radius: 125px;
+    border-top-right-radius: 125px;
+}
+
+/* ================= PRICING ================= */
+.pricing-header {
+    margin-bottom: 4rem;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.pricing-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.featured-tier {
+    border-color: var(--neon-purple);
+}
+
+.popular-tag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--neon-purple);
+    color: var(--text-main);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 12px;
+    font-weight: bold;
+}
+
+.price {
+    margin: 1.5rem 0;
+}
+
+.price-big {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.price-small {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.pricing-desc {
+    margin-bottom: 2rem;
+    height: 3rem;
+}
+
+.pricing-features {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.pricing-features li {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+
+
+.portrait-image {
+    width: 450px;
+    height: 550px;
+    object-fit: cover; /* Ensures your face isn't stretched */
+}
+
+.portrait-image {
+    filter: drop-shadow(0 0 5px rgba(78, 168, 222, 0.8))
+            drop-shadow(0 0 10px rgba(157, 78, 221, 0.6));
+
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+
+
+/* ================= RESPONSIVE DESIGN ================= */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 100;
+}
+
+@media (max-width: 900px) {
+    .hero-title { font-size: 3.5rem; }
+    #hero { flex-direction: column; align-items: flex-start; }
+    .hero-graphic { width: 100%; min-width: auto; margin-top: 2rem; }
+    
+    .section-header-split { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .feature-large { grid-column: span 1; grid-row: auto; }
+    
+    #developer { flex-direction: column; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .button-group { flex-direction: column; }
+
+    /* Hamburger Menu Styles */
+    .mobile-menu-btn { display: block; }
+    
+    .nav-links {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: var(--card-bg);
+        
+        /* THIS IS THE CORE CHANGE: Switches from horizontal row to vertical stack */
+        display: flex; /* Ensures flexbox is active */
+        flex-direction: column; 
+        
+        align-items: center;
+        padding: 3rem 0; /* More space for the stacked links */
+        gap: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        transform: translateY(-200%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 99;
+    }
+    
+    .nav-links.nav-open {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .nav-links a { 
+        margin-left: 0; /* Important reset for the row gap from desktop */
+        font-size: 1.2rem; 
+    }
+}
+
+
+
+
+
+
+
+
+/* ================= SCROLL REVEAL ANIMATIONS ================= */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px); /* Pushes elements down slightly */
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); /* Smooth easing */
+}
+
+.scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0); /* Pops them up to original position */
+}
+
+/* ================= 3D HERO CANVAS ================= */
+#hero-3d-canvas {
+    width: 100%;
+    height: 450px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+}
+#hero-3d-canvas:active { cursor: grabbing; }
+
+.hero-graphic {
+    flex: 1; /* Takes up the remaining space on the right */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 400px; /* Forces the 3D canvas to have width */
+}
+
+/* ================= CONTACT FORM ================= */
+.contact-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--card-bg);
+    padding: 3rem;
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--neon-orange);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contact-form input, .contact-form textarea {
+    width: 100%;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.contact-form input:focus, .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+}
+
+/* ================= FOOTER ================= */
+.site-footer {
+    text-align: center;
+    padding: 3rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+    color: var(--text-muted);
+}
+
+
+/* ================= 3D PARALLAX TILT EFFECTS ================= */
+/* Expand the elements that live in 3D space */
+.bento-card, .pricing-card, .portrait-image, .contact-form-container, .hero-title, .btn {
+    transform-style: preserve-3d;
+    transition: box-shadow 0.1s ease-out;
+}
+
+/* Smooth snap back */
+.tilt-reset {
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease-out !important;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) !important;
+}
+
+/* Make text, icons, and form inputs float off the background */
+.bento-card h3, .bento-card h4, .bento-card i, .pricing-card h3, .pricing-card .price, 
+.contact-form-container input, .contact-form-container textarea, .contact-form-container button {
+    transform: translateZ(40px);
+}
+
+.bento-card p, .pricing-card p, .pricing-features {
+    transform: translateZ(20px);
+}
+
+
+/* Prevent pricing buttons from floating/clipping to ensure they are always clickable */
+.pricing-card .btn {
+    transform: translateZ(0px) !important;
+    transform-style: flat !important;
+}
+
+
+/* ================= MIC BUTTON & PULSE ANIMATION ================= */
+.mic-button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    transition: all 0.3s ease;
+}
+
+.mic-button i {
+    font-size: 1.5rem;
+}
+
+/* This class is added via JS when the mic is active */
+.mic-active {
+    background-color: transparent !important;
+    border: 2px solid var(--neon-purple);
+    color: var(--neon-purple);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+    animation: pulseGlow 1.5s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(157, 78, 221, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(157, 78, 221, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(157, 78, 221, 0); }
+}
+
+
+/* ================= MANUAL COMMAND INPUT ================= */
+.command-input {
+    flex-grow: 1;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 0.8rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.command-input:focus {
+    outline: none;
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
+}
+
+
+
+
+/* ================= MODALS (AUTH & DASHBOARD) ================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--neon-purple);
+    padding: 3rem;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--text-main);
+}
+
+.modal-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
