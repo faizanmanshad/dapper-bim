@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Dapper.BIM</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        body { background: var(--bg-dark); color: var(--text-main); display: flex; min-height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR STYLES */
+        .sidebar { width: 250px; background: var(--card-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 2rem; }
+        .sidebar-logo { font-weight: bold; font-size: 1.2rem; margin-bottom: 3rem; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-menu { display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; }
+        .nav-item { display: flex; align-items: center; gap: 0.8rem; padding: 1rem; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+        .nav-item:hover, .nav-item.active { background: rgba(157, 78, 221, 0.1); color: var(--neon-purple); }
+        .nav-item i { font-size: 1.2rem; }
+        .logout-item { color: #ff5f56; margin-top: auto; }
+        .logout-item:hover { background: rgba(255, 95, 86, 0.1); color: #ff5f56; }
+
+        /* MAIN CONTENT STYLES */
+        .main-content { flex-grow: 1; padding: 4rem; overflow-y: auto; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* PLUGIN CARDS */
+        .plugin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .plugin-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-top: 3px solid var(--border-color); display: flex; flex-direction: column; }
+        .plugin-card.owned { border-top-color: #27c93f; }
+        .plugin-card.store { border-top-color: var(--neon-orange); }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+         <a href="../index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="width:12px; height:12px; border-radius:50%; background: var(--neon-purple);"></span>
+        Dapper.BIM
+         </a>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item active" data-target="tab-my-plugins">
+                <i class="ph ph-package"></i> My Plugins
+            </div>
+            <div class="nav-item" data-target="tab-store">
+                <i class="ph ph-storefront"></i> Plugin Store
+            </div>
+            <div class="nav-item" data-target="tab-profile">
+                <i class="ph ph-user"></i> Profile Settings
+            </div>
+        </div>
+
+        <div class="nav-item logout-item" id="logout-btn">
+            <i class="ph ph-sign-out"></i> Sign Out
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header style="margin-bottom: 3rem;">
+            <p class="mono-small text-muted" id="user-greeting">Loading...</p>
+            <h1 id="page-title">My Plugins</h1>
+        </header>
+
+        <section id="tab-my-plugins" class="tab-content active">
+            <p class="text-blue">Software you currently hold active licenses for.</p>
+            <div class="plugin-grid">
+                <div class="plugin-card owned">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
+                        <h3 class="text-main">Family Forge</h3>
+                        <span class="mono-small" style="color: #27c93f;">ACTIVE</span>
+                    </div>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1;">Automated family type generation and parameter mapping.</p>
+                    <a href="../FamilyForge_Setup_2024.exe" class="btn btn-outline" download style="text-align:center; padding: 0.5rem; font-size: 0.8rem;">DOWNLOAD .EXE</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-store" class="tab-content">
+            <p class="text-blue">Expand your automation arsenal.</p>
+            <div class="plugin-grid">
+                <div class="plugin-card store">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
+                        <h3 class="text-orange">The Master Combo</h3>
+                        <span class="mono-small text-orange">$129</span>
+                    </div>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1;">Unlock every single plugin in the Dapper suite.</p>
+                    <button class="btn btn-primary" style="padding: 0.5rem; font-size: 0.8rem;">PURCHASE NOW</button>
+                </div>
+                
+                <div class="plugin-card store">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
+                        <h3 class="text-main">Auto-Dimension Pro</h3>
+                        <span class="mono-small text-muted">$49</span>
+                    </div>
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1;">Intelligently dimensions entire floor plans automatically.</p>
+                    <button class="btn btn-outline" style="padding: 0.5rem; font-size: 0.8rem;">PURCHASE NOW</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-profile" class="tab-content">
+        <div style="background: var(--card-bg); padding: 2.5rem; border: 1px solid var(--border-color); max-width: 600px;">
+        
+        <h3 style="margin-bottom: 1.5rem;" class="text-purple">Account Details</h3>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <p class="mono-small text-muted">FULL NAME</p>
+            <div style="display: flex; gap: 10px; margin-top: 5px;">
+                <input type="text" id="display-name-input" class="form-input" style="flex-grow: 1; padding: 0.5rem;">
+                <button id="update-name-btn" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.7rem;">SAVE</button>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <p class="mono-small text-muted">EMAIL ADDRESS</p>
+            <p class="text-main" id="profile-email" style="margin-top: 5px; opacity: 0.7;">...</p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
+
+        <h3 style="margin-bottom: 1.5rem;" class="text-orange">Security</h3>
+        <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Enter a new password below to update your credentials.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <input type="password" id="new-password" placeholder="New Password" class="form-input" style="padding: 0.5rem;">
+            <input type="password" id="confirm-password" placeholder="Confirm New Password" class="form-input" style="padding: 0.5rem;">
+            <button id="reset-password-btn" class="btn btn-outline" style="border-color: var(--neon-orange); color: var(--neon-orange);">UPDATE PASSWORD</button>
+        </div>
+
+        <p id="profile-status-msg" class="mono-small text-center" style="margin-top: 1.5rem;"></p>
+        </div>
+        </section>
+
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

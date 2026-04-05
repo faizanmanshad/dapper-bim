@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Portal | Dapper.BIM</title>
+    <title>Sign In | Dapper.BIM</title>
     
     <link rel="stylesheet" href="../style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -13,14 +13,11 @@
     <style>
         .portal-body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-dark); }
         .portal-card { background: var(--card-bg); padding: 3rem; border: 1px solid var(--border-color); width: 100%; max-width: 450px; border-top: 3px solid var(--neon-purple); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .dashboard-card { max-width: 800px; }
-        .hidden { display: none !important; }
-        .plugin-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 1.5rem; border: 1px solid var(--border-color); margin-bottom: 1rem; }
         .form-input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 1rem; font-family: 'Inter', sans-serif; transition: border-color 0.3s; }
         .form-input:focus { outline: none; border-color: var(--neon-purple); }
+        .hidden { display: none !important; }
     </style>
 </head>
-
 <body class="portal-body">
 
     <a href="../index.html" style="position: absolute; top: 2rem; left: 2rem; color: var(--text-muted); text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">
@@ -35,7 +32,6 @@
 
         <form id="auth-form" style="display: flex; flex-direction: column; gap: 1rem;">
             <input type="text" id="full-name" placeholder="Full Name" class="form-input hidden">
-            
             <input type="email" id="email" placeholder="Email Address" required class="form-input">
             <input type="password" id="password" placeholder="Password" required class="form-input">
             
@@ -58,29 +54,6 @@
             <span id="toggle-text">Don't have an account?</span> 
             <a href="#" id="toggle-link" class="text-blue" style="text-decoration: none;">Sign Up</a>
         </p>
-    </div>
-
-    <div id="dashboard-section" class="portal-card dashboard-card hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>My Hub</h2>
-            <button id="logout-btn" class="btn btn-outline" style="border-color: #ff5f56; color: #ff5f56; padding: 0.5rem 1rem;">SIGN OUT</button>
-        </div>
-        
-        <p class="mono-small text-blue" id="user-email-display">Logged in as: ...</p>
-        
-        <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
-            <h3 style="margin-bottom: 1rem;">Your Licenses & Downloads</h3>
-            
-            <div id="owned-plugins-list">
-                <div class="plugin-item">
-                    <div>
-                        <h4 class="text-orange">Family Forge (Revit 2024)</h4>
-                        <p class="mono-small text-muted">Status: <span style="color: #27c93f;">ACTIVE</span></p>
-                    </div>
-                    <a href="../FamilyForge_Setup_2024.exe" class="btn btn-primary" download>DOWNLOAD .EXE</a>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="portal.js"></script>
